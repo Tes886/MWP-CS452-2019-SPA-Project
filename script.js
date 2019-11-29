@@ -3,20 +3,20 @@ window.onload = function () {
     // application reference 
 
     // define logintemp, animationTemp and outlet
-    // let token;
+    let token;
     // console.log(token);
     const loginTemp = `
-                <h1>Please Login</h1><br>
+                <h1>Please Login</h1><br>   
                 Username:<input placeholder="mwp" value="mwp"/><br/>
                 Password:<input placeholder="123" value="123"/><br/>
                 <button id="login">Login</button>
             `
     const animationTemp = `
-                    <div id="address"> Welcome to SPA Animation</div>
+                    <div id="address"></div>  
                     <textarea id="animation" rows="25" cols="25" style="font-size: 20px"></textarea><br><br>
                     <button id="refresh">Refresh Animation</button>
                     <button id="logout">Logout</button>        
-            
+                    <div id= 
                     `
     const outlet = document.querySelector("#outlet");
 
@@ -26,75 +26,91 @@ window.onload = function () {
         outlet.innerHTML = animationTemp;
         logoutbtn();
         refreshbtn();
+        gotLocation()
+        // history.pushState(outlet,null,url)
+
     });
 
     function logoutbtn() {
         document.querySelector("#logout").addEventListener('click', function () {
             outlet.innerHTML = loginTemp;
+            // history.pushState(outlet,null,url)
 
         });
     }
     function refreshbtn() {
 
-        document.querySelector("#refresh").addEventListener('click', function () {
-            let text = document.querySelector("#animation");
-            text.innerHTML = ccccccc;
-        });
+        document.querySelector("#refresh").addEventListener('click',myAnimantion);
+        //let text = document.querySelector("#animation");
+       // text.innerHTML = frame;
 
     }
 
-    function gettoken() {
-        return fetch("http://www.mumstudents.org/api/login", {
+    async function gettoken() {
+       const resp = await fetch("http://www.mumstudents.org/api/login", {
             method: "POST",
             headers: { "content-type": "application/json" },
             body: JSON.stringify({
                 username: 'mwp', password: '123'
             })
-        }
-        )
+        })
+            const respBody= await resp.json();
+                token = respBody.token;
 
-            .then((resp) => { return resp.json() })
-            .then((obj) => {
-                // token = obj.token;
-                // console.log(token)
+                myAnimantion();
+
+        //gettoken();
+    }
 
 
-                // function myAnimantion() {
-                return fetch("http://mumstudents.org/api/animation", {
-                    method: "GET",
-                    headers: {
-                        "Authorization": `Bearer ${obj.token}`
+    function myAnimantion() {
+        fetch("http://mumstudents.org/api/animation", {
+            method: "GET",
+            headers: { "Authorization": `Bearer ${token}` }
+        })
+            .then(resp => resp.text())
+            .then(obj => {
+                // console.log(obj);
+                frame = obj.split('=====\n');
+                //console.log(frame);
 
+                let count = 0;
+                countId = setInterval(function () {
+                    
+                    document.querySelector("#animation").innerHTML = frame[count];
+                    count++;
+
+                    if (count === frame.length) {
+                        count = 0;
                     }
-                })
+                }, 200);
 
-
-                    // const frame = obj.split(`=====\n`);
-                    // const frameLength = frame.length;
-                    // let currentFrame = 0;
-                    // animationTag = this.setInterval(() => {
-                    //     document.querySelector("#animation").value = frame[currentFrame];
-                    //     currentFrame++;
-                    //  })
-                    .then(resp => resp.text())
-                    .then(obj => {
-                        console.log(obj);
-                        ccccccc = obj.split("=====");
-                        console.log(ccccccc);
-                    });
             });
     }
+
     gettoken();
 
-    // const frameLength = frame.length;
-    // let currentFrame = 0;
-    
-    // function motion() {
-    //     setInterval(() => {
-    //         document.querySelector("#animation").innerHTML = frame[currentFrame];
-    //         currentFrame++;
+    //function fechLocation() {
 
-    //     }
+        // navigator.geolocation.getCurrentPosition(gotLocation);
+
+        async function gotLocation() {
+           // console.log();
+            let resp = await fetch(`http://open.mapquestapi.com/geocoding/v1/reverse?key=ycSAKAgeWuIeiGZbLuSi5wp0867aaJFL&location=30.333472,-81.470448`);
+            resp = await resp.json();
+            console.log(resp);
+
+            const city = resp.results[0].locations[0].adminArea5
+            const state = resp.results[0].locations[0].adminArea3
+            const country = resp.results[0].locations[0].adminArea1
+            const zip = resp.results[0].locations[0].postalCode
+            
+            document.getElementById("address").innerHTML =`Welcome all from ${city}, ${state} ${zip}, ${country}!`;
+
+
+        }
+        gotLocation()
+    //}
 
 
 }
