@@ -14,4 +14,8 @@ DAY 3.....11/28/2019
 3. Made to display the geolocation on the animationTemp page by creating a key to fetch 
 but not yet finish to get my exact approximate location 
 4. stiil having a problem to make a uniform refresh button animation display on my animationTemp.
-   
+
+DAY 4 ......11/29/2019
+1. I cried today since I resolve to get my animations uniform whenever I refresh the animation
+2. I did the geolocation to display my current location on my animationTemp page
+3. 
