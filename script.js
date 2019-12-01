@@ -21,12 +21,17 @@ window.onload = function () {
                     `
     const outlet = document.querySelector("#outlet");
 
+    window.addEventListener('popstate', function (event) {
+        console.log("state: " + JSON.stringify(event.state))
+    }); 
+
     firstPage();
     function firstPage() {
 
         outlet.innerHTML = loginTemp
         document.querySelector("#login").addEventListener('click', aniTemp);
-
+        history.pushState({ page: 1 }, "title 1", "?page=1")
+        addEventListener(event,URL);
     }
 
     function aniTemp() {
@@ -37,6 +42,9 @@ window.onload = function () {
         document.querySelector("#refresh").addEventListener('click', refreshbtn);
         document.querySelector("#logout").addEventListener('click', logoutbtn);
         gettoken();
+        history.pushState({ page: 2 }, "title 2", "?page=2");
+        addEventListener(event,URL);
+
     }
 
 
@@ -45,6 +53,8 @@ window.onload = function () {
         outlet.innerHTML = loginTemp;
         document.querySelector("#login").addEventListener('click', aniTemp);
         clearInterval(timerId);
+        history.back();
+        addEventListener(event,URL);
 
     }
 
@@ -91,7 +101,7 @@ window.onload = function () {
                 count = 0;
             }
         }, 200);
-
+        
     }
 
     function fechLocation() {
@@ -114,7 +124,7 @@ window.onload = function () {
 
             document.querySelector("#address").innerHTML = `Welcome all from ${city}, ${state}, ${zip}, ${country}!`;
 
-            //fechLocation();
+            
 
         }
 

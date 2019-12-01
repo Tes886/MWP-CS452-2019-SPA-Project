@@ -18,4 +18,8 @@ but not yet finish to get my exact approximate location
 DAY 4 ......11/29/2019
 1. I cried today since I resolve to get my animations uniform whenever I refresh the animation
 2. I did the geolocation to display my current location on my animationTemp page
-3. 
+
+DAY 5......11/30/2019
+1. I did the history changes
+2. I did read more about how to use how to manipulate the history API
+ 
