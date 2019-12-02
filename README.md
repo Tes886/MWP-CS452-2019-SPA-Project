@@ -22,4 +22,7 @@ DAY 4 ......11/29/2019
 DAY 5......11/30/2019
 1. I did the history changes
 2. I did read more about how to use how to manipulate the history API
- 
+
+DAY 6...11/31/2019
+1. I was`t sure about if succeded on coding the history  part and i was doing a research on it 
+2. I road about more about asynchronous 

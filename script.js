@@ -110,12 +110,12 @@ window.onload = function () {
         async function success(position) {
             lat = position.coords.latitude
             lon = position.coords.longitude;
-            console.log(lat);
-            console.log(lon);
+           // console.log(lat);
+           // console.log(lon);
 
             let resp = await fetch(`http://open.mapquestapi.com/geocoding/v1/reverse?key=ycSAKAgeWuIeiGZbLuSi5wp0867aaJFL&location=${lat},${lon}`);
             resp = await resp.json();
-            console.log(resp);
+           // console.log(resp);
 
             const city = resp.results[0].locations[0].adminArea5
             const state = resp.results[0].locations[0].adminArea3
