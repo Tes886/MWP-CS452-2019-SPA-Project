@@ -11,19 +11,15 @@ window.onload = function () {
                 Username:<input placeholder="mwp" value="mwp"/><br/>
                 Password:<input placeholder="123" value="123"/><br/>
                 <button id="login">Login</button>
+                
             `
     const animationTemp = `
-                    <div id="address"></div>  
+                    <div id="address"  style="font-size:20px" style="font-weight:bold"></div>  
                     <textarea id="animation" rows="25" cols="50" style="font-size: 20px"></textarea><br><br>
                     <button id="refresh">Refresh Animation</button>
                     <button id="logout">Logout</button>        
-                    <div id= 
                     `
     const outlet = document.querySelector("#outlet");
-
-    window.addEventListener('popstate', function (event) {
-        console.log("state: " + JSON.stringify(event.state))
-    }); 
 
     firstPage();
     function firstPage() {
@@ -31,37 +27,41 @@ window.onload = function () {
         outlet.innerHTML = loginTemp
         document.querySelector("#login").addEventListener('click', aniTemp);
         history.pushState({ page: 1 }, "title 1", "?page=1")
-        addEventListener(event,URL);
+
+        window.addEventListener('popstate', function (event) {
+            if(event.state.page===1){
+                clearInterval(timerId)
+                firstPage() 
+            }
+    
+        });
+
     }
 
     function aniTemp() {
         clearInterval(timerId);
         outlet.innerHTML = animationTemp;
+
+        history.pushState({ page: 2 }, "title 2", "?page=2");
+
+
         fechLocation();
 
         document.querySelector("#refresh").addEventListener('click', refreshbtn);
         document.querySelector("#logout").addEventListener('click', logoutbtn);
         gettoken();
-        history.pushState({ page: 2 }, "title 2", "?page=2");
-        addEventListener(event,URL);
 
     }
-
-
 
     function logoutbtn() {
         outlet.innerHTML = loginTemp;
         document.querySelector("#login").addEventListener('click', aniTemp);
         clearInterval(timerId);
-        history.back();
-        addEventListener(event,URL);
 
     }
 
-
     function refreshbtn() {
         clearInterval(timerId);
-        // document.querySelector("#refresh").addEventListener('click', myAnimantion);
         myAnimantion();
 
     }
@@ -83,7 +83,7 @@ window.onload = function () {
     }
 
     async function myAnimantion() {
-       // clearInterval(timerId);
+        clearInterval(timerId);
         const resp = await fetch("http://mumstudents.org/api/animation", {
             method: "GET",
             headers: { "Authorization": `Bearer ${token}` }
@@ -91,8 +91,8 @@ window.onload = function () {
         const respBody = await resp.text();
         //console.log(respBody);
         frame = respBody.split('=====\n');
-        console.log(frame);
-       
+        //console.log(frame);
+
         let count = 0;
         timerId = setInterval(function () {
             document.getElementById("animation").innerHTML = frame[count];
@@ -101,7 +101,9 @@ window.onload = function () {
                 count = 0;
             }
         }, 200);
-        
+    
+       // history.pushState({ page: 3 }, "title 3", "?page=3");
+
     }
 
     function fechLocation() {
@@ -110,12 +112,12 @@ window.onload = function () {
         async function success(position) {
             lat = position.coords.latitude
             lon = position.coords.longitude;
-           // console.log(lat);
-           // console.log(lon);
+            // console.log(lat);
+            // console.log(lon);
 
             let resp = await fetch(`http://open.mapquestapi.com/geocoding/v1/reverse?key=ycSAKAgeWuIeiGZbLuSi5wp0867aaJFL&location=${lat},${lon}`);
             resp = await resp.json();
-           // console.log(resp);
+            // console.log(resp);
 
             const city = resp.results[0].locations[0].adminArea5
             const state = resp.results[0].locations[0].adminArea3
@@ -124,7 +126,7 @@ window.onload = function () {
 
             document.querySelector("#address").innerHTML = `Welcome all from ${city}, ${state}, ${zip}, ${country}!`;
 
-            
+
 
         }
 
